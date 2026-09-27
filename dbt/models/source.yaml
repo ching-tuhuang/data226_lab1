@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: raw
+    database: LAB1
+    schema: raw
+    description: "Schema which stores raw tables (ETL)"
+    tables:
+    - name: weather_data_lab1
+      identifier: weather_data_lab1
+      description: "Raw weather data."

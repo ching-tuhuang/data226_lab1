@@ -1,0 +1,77 @@
+version: 2
+
+models:
+  # - name: weather_data_lab1
+  #   columns:
+  #     - name: latitude
+  #       data_tests:
+  #         - not_null
+
+  #     - name: longitude
+  #       data_tests:
+  #         - not_null
+
+  #     - name: date
+  #       data_tests:
+  #         - not_null
+  - name: temperature_range
+    columns:
+      - name: temperature_range
+        data_tests:
+          - not_null
+
+  - name: temperature_moving_average
+    columns:
+      - name: temperature_7day_avg
+        data_tests:
+          - not_null
+  - name: rolling_rainfall
+    columns:
+      - name: rainfall_7day_total
+        data_tests:
+          - not_null
+  - name: dry_spell
+    columns:
+      - name: is_dry
+        data_tests:
+          - not_null
+
+      - name: dry_spell_length
+        data_tests:
+          - not_null
+  - name: temperature_anomaly
+    columns:
+      - name: temperature_60day_avg
+        data_tests:
+          - not_null
+
+      - name: temperature_anomaly
+        data_tests:
+          - not_null
+  - name: rainy_days
+    columns:
+      - name: rainy_days_7day
+        data_tests:
+          - not_null
+  - name: hot_days
+    columns:
+      - name: is_hot_day
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+  - name: sunshine_trend
+    columns:
+      - name: sunshine_7day_avg
+        data_tests:
+          - not_null
+  - name: humidity_trend
+    columns:
+      - name: humidity_7day_avg
+        data_tests:
+          - not_null
+  - name: wind_trend
+    columns:
+      - name: wind_speed_7day_avg
+        data_tests:
+          - not_null
