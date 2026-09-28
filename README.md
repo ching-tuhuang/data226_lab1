@@ -78,7 +78,7 @@ dags/lab1.py
 This DAG:
 
 1. Gets the latitude and longitude values from Airflow Variables.
-2. Retrieves the past 60 days of weather data from Open-Meteo.
+2. Retrieves the past 60 days and forecast 14 days of weather data from Open-Meteo.
 3. Transforms the API response into raw weather records.
 4. Loads the raw data into Snowflake:
 
