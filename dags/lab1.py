@@ -165,7 +165,7 @@ def transform(data):
         df["data_type"] = df["date"].dt.date.apply(
             lambda date: (
                 "forecast"
-                if date > current_date
+                if date >= current_date
                 else "past_model_data"
             )
         )
