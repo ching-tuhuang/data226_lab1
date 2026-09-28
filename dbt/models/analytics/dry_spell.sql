@@ -3,8 +3,9 @@ WITH base AS (
         latitude,
         longitude,
         date,
+        data_type,
         precipitation,
-
+        
         CASE
             WHEN precipitation IS NOT NULL
                  AND precipitation < 1

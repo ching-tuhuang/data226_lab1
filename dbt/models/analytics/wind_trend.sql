@@ -2,6 +2,7 @@ SELECT
     latitude,
     longitude,
     date,
+    data_type,
     wind_speed_mean,
     wind_speed_max,
     wind_gusts_max,

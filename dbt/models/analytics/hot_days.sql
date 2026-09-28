@@ -2,6 +2,7 @@ SELECT
     latitude,
     longitude,
     date,
+    data_type,
     temp_max,
     temp_mean,
 

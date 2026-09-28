@@ -3,6 +3,7 @@ WITH temperature_baseline AS (
         latitude,
         longitude,
         date,
+        data_type,
         temp_mean,
         temp_max,
         temp_min,
@@ -18,6 +19,7 @@ SELECT
     latitude,
     longitude,
     date,
+    data_type,
     temp_mean,
     temperature_60day_avg,
     temp_mean - temperature_60day_avg

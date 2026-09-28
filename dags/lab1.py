@@ -32,7 +32,7 @@ def return_snowflake_conn():
 
 @task
 def extract():
-    """Get the past 60 days of weather"""
+    """Get the past 60 days of weather data."""
 
     url = "https://api.open-meteo.com/v1/forecast"
 
@@ -43,7 +43,7 @@ def extract():
             "latitude": lat,
             "longitude": lon,
             "past_days": 60,
-            "forecast_days": 0,
+            "forecast_days": 14,
             "daily": [
                 # Temperature
                 "temperature_2m_mean",
@@ -99,6 +99,7 @@ def extract():
 def transform(data):
     """
     Transform and combine raw API data.
+
     No analytical calculations are performed here.
     """
 
@@ -154,27 +155,34 @@ def transform(data):
             "shortwave_radiation": daily["shortwave_radiation_sum"],
         })
 
-        df["date"] = (
-            pd.to_datetime(df["date"])
-            .dt.strftime("%Y-%m-%d")
+        df["date"] = pd.to_datetime(df["date"])
+
+        # Use Los Angeles time to classify the data
+        current_date = pd.Timestamp.now(
+            tz="America/Los_Angeles"
+        ).date()
+
+        df["data_type"] = df["date"].dt.date.apply(
+            lambda date: (
+                "forecast"
+                if date > current_date
+                else "past_model_data"
+            )
         )
+
+        df["date"] = df["date"].dt.strftime("%Y-%m-%d")
 
         return df
 
     df1 = convert_data_to_df(data1)
     df2 = convert_data_to_df(data2)
 
+    # Combine the two locations
     combined_df = pd.concat(
         [df1, df2],
         ignore_index=True
     )
 
-    # Convert NaN to None so Snowflake stores NULL
-    combined_df = (
-        combined_df
-        .astype(object)
-        .where(pd.notna(combined_df), None)
-    )
 
     print(combined_df.head())
     print(combined_df.columns.tolist())
@@ -196,6 +204,7 @@ def load(records):
             latitude NUMBER(9, 6),
             longitude NUMBER(9, 6),
             date DATE,
+            data_type VARCHAR,
 
             temp_mean FLOAT,
             temp_max FLOAT,
@@ -223,6 +232,7 @@ def load(records):
         );
         """)
 
+        # Remove the previous 60-day dataset
         cursor.execute(f"""
         DELETE FROM {target_table};
         """)
@@ -232,6 +242,7 @@ def load(records):
             latitude,
             longitude,
             date,
+            data_type,
 
             temp_mean,
             temp_max,
@@ -256,13 +267,20 @@ def load(records):
             shortwave_radiation
         )
         VALUES (
+            %s, %s, %s, %s,
+
             %s, %s, %s,
+
             %s, %s, %s,
-            %s, %s, %s,
+
             %s,
+
             %s, %s,
+
             %s, %s,
+
             %s, %s, %s,
+
             %s
         );
         """
@@ -273,7 +291,9 @@ def load(records):
                 "-",
                 record["longitude"],
                 "-",
-                record["date"]
+                record["date"],
+                "-",
+                record["data_type"]
             )
 
             cursor.execute(
@@ -282,6 +302,7 @@ def load(records):
                     record["latitude"],
                     record["longitude"],
                     record["date"],
+                    record["data_type"],
 
                     record["temp_mean"],
                     record["temp_max"],

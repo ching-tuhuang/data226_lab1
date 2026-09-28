@@ -2,6 +2,7 @@ SELECT
     latitude,
     longitude,
     date,
+    data_type,
     rain,
 
     SUM(

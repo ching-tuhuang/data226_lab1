@@ -2,6 +2,7 @@ SELECT
     latitude,
     longitude,
     date,
+    data_type,
     sunshine_duration,
 
     AVG(sunshine_duration) OVER (

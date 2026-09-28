@@ -2,6 +2,7 @@ SELECT
     latitude,
     longitude,
     date,
+    data_type,
     AVG(temp_mean) OVER (
         PARTITION BY latitude, longitude
         ORDER BY date
