@@ -42,8 +42,8 @@ def extract():
         params = {
             "latitude": lat,
             "longitude": lon,
-            "past_days": 60,
-            "forecast_days": 14,
+            "past_days": 0,
+            "forecast_days": 7,
             "daily": [
                 # Temperature
                 "temperature_2m_mean",
