@@ -10,7 +10,7 @@ WITH temperature_baseline AS (
 
         AVG(temp_mean) OVER (
             PARTITION BY latitude, longitude
-        ) AS temperature_60day_avg
+        ) AS temperature_7day_avg
 
     FROM {{ ref('weather_data_lab1') }}
 )
@@ -21,8 +21,8 @@ SELECT
     date,
     data_type,
     temp_mean,
-    temperature_60day_avg,
-    temp_mean - temperature_60day_avg
+    temperature_7day_avg,
+    temp_mean - temperature_7day_avg
         AS temperature_anomaly
 
 FROM temperature_baseline
