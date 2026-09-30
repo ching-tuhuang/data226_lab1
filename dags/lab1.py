@@ -3,6 +3,8 @@ from airflow.models import Variable
 from datetime import datetime
 from airflow.decorators import task
 from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
+
 
 import requests
 import pandas as pd
@@ -345,4 +347,12 @@ with DAG(
 
     data = extract()
     records = transform(data)
-    load(records)
+    load_task = load(records)
+
+    trigger_dbt = TriggerDagRunOperator(
+        task_id="trigger_dbt",
+        trigger_dag_id="dbt_elt",
+        wait_for_completion=True,
+    )
+
+    load_task >> trigger_dbt
