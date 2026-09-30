@@ -232,7 +232,7 @@ def load(records):
         );
         """)
 
-        # Remove the previous 60-day dataset
+        # Remove the existing forecast dataset
         cursor.execute(f"""
         DELETE FROM {target_table};
         """)
