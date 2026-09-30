@@ -32,7 +32,7 @@ def return_snowflake_conn():
 
 @task
 def extract():
-    """Get the past 60 days of weather data."""
+    """Retrieves 7 days of weather forecast data"""
 
     url = "https://api.open-meteo.com/v1/forecast"
 
