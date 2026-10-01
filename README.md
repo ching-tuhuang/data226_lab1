@@ -85,12 +85,13 @@ This DAG:
    ```text
    LAB1.RAW.WEATHER_DATA_LAB1
    ```
+5. After ETL, this dag will also trigger dbt_elt as well.
 
 Run this DAG first because the dbt project uses this raw table as its input.
 
-## 6. Run the dbt ELT DAG
+## 6. Dbt ELT DAG
 
-After the weather ETL DAG succeeds, trigger the dbt DAG from:
+After the weather ETL DAG succeeds, it will automatically trigger the dbt DAG from:
 
 ```text
 dags/dbt_elt.py
@@ -123,7 +124,7 @@ Copy the SQL statements into a Snowflake Worksheet and execute them to verify th
 
 
 ```text
-lab1.py (Airflow)-> dbt_elt.py (Airflow)-> result.sql (on snowflake)
+lab1.py (Airflow)-> dbt_elt.py (trigger by lab1.py)-> result.sql (on snowflake)
 ```
 
 ## 9. Important files
